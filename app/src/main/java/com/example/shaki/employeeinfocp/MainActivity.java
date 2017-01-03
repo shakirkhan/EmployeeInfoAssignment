@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             allEM.close();
             allDT.close();
         } else {
-            showMessage("Error", "Nothing Found");
+            showMessage("Error", "No Data Found");
         }
     }
 
