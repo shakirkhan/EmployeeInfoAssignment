@@ -1,6 +1,5 @@
 package com.example.shaki.employeeinfocp;
 
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,14 +7,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    EditText eID, eName, eDesignation, eCompany;
+    EditText eID, eName, eDesignation, eCompany, eSalary, eDoB;
 //    Button addButton; //, viewButton, updateButton, deleteButton, searchButton;
 
     @Override
@@ -27,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         eName = (EditText) findViewById(R.id.editText_nam);
         eDesignation = (EditText) findViewById(R.id.editText_des);
         eCompany = (EditText) findViewById(R.id.editText_com);
+        eSalary = (EditText) findViewById(R.id.editText_salary);
+        eDoB = (EditText) findViewById(R.id.editText_dob);
 //        EmployeeProvider.DatabaseHelper dbObject;
     }
 
@@ -37,27 +37,44 @@ public class MainActivity extends AppCompatActivity {
         String name = eName.getText().toString();
         String designation = eDesignation.getText().toString();
         String company = eCompany.getText().toString();
+        String salary = eSalary.getText().toString();
+        String dob = eDoB.getText().toString();
 
-        ContentValues colValues = new ContentValues();
-        colValues.put(EmployeeProvider.col_1, id);
-        colValues.put(EmployeeProvider.col_2, name);
-        colValues.put(EmployeeProvider.col_3, designation);
-        colValues.put(EmployeeProvider.col_4, company);
+        // for employee table
+        ContentValues colValuesEM = new ContentValues();
+        colValuesEM.put(EmployeeProvider.COL_ID, id);
+        colValuesEM.put(EmployeeProvider.COL_NAME, name);
+        colValuesEM.put(EmployeeProvider.COL_DESIGNATION, designation);
+        colValuesEM.put(EmployeeProvider.COL_COMPANY, company);
 
-        Uri uriA = getContentResolver().insert(EmployeeProvider.CONTENT_URL, colValues);
-        if (uriA != null) {
+        Uri uriAem = getContentResolver().insert(EmployeeProvider.CONTENT_URI_EMPLOYEE, colValuesEM);
+        if (uriAem != null) {
             Toast.makeText(this, "Insert Successful", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Insert Failed", Toast.LENGTH_LONG).show();
         }
 //        Toast.makeText(getBaseContext(), "Insert Successful", Toast.LENGTH_LONG).show();
+
+        // for details table
+        ContentValues colValuesDT = new ContentValues();
+        colValuesDT.put(EmployeeProvider.COL_ID, id);
+        colValuesDT.put(EmployeeProvider.COL_SALARY, salary);
+        colValuesDT.put(EmployeeProvider.COL_DoB, dob);
+        Uri uriAdt = getContentResolver().insert(EmployeeProvider.CONTENT_URI_DETAILS, colValuesDT);
+        if (uriAdt != null) {
+            Toast.makeText(this, "Insert Successful", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Insert Failed", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
 
 
     public void deleteEntry(View view) {
         String id = eID.getText().toString();
-        long isDeleted = getContentResolver().delete(EmployeeProvider.CONTENT_URL, " id = ?", new String[]{id});
+        long isDeleted = getContentResolver().delete(EmployeeProvider.CONTENT_URI_EMPLOYEE, " id = ?", new String[]{id});
         if (isDeleted > 0)
             Toast.makeText(MainActivity.this, "Entry Deleted", Toast.LENGTH_LONG).show();
         else
@@ -68,17 +85,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewAll(View v) {
 //        String[] projection = {"id", "name", "designation", "company"};
-        Cursor all = getContentResolver().query(EmployeeProvider.CONTENT_URL, null, null, null, null); //null instead of "proejction"
-        if (all != null && all.getCount() > 0) {
+        Cursor allEM = getContentResolver().query(EmployeeProvider.CONTENT_URI_EMPLOYEE, null, null, null, null); //null instead of "proejction"
+        Cursor allDT = getContentResolver().query(EmployeeProvider.CONTENT_URI_DETAILS, null, null, null, null);
+        if (allEM != null && allEM.getCount() > 0 & allDT != null && allDT.getCount() > 0) {
             StringBuffer infoBuffer = new StringBuffer();
-            while (all.moveToNext()) {
-                infoBuffer.append("ID: " + all.getString(0) + "\n");
-                infoBuffer.append("Name: " + all.getString(1) + "\n");
-                infoBuffer.append("Designation: " + all.getString(2) + "\n");
-                infoBuffer.append("Company: " + all.getString(3) + "\n\n");
+            while (allEM.moveToNext() & allDT.moveToNext()) {
+                infoBuffer.append("ID: " + allEM.getString(0) + "\n");
+                infoBuffer.append("Name: " + allEM.getString(1) + "\n");
+                infoBuffer.append("Designation: " + allEM.getString(2) + "\n");
+                infoBuffer.append("Company: " + allEM.getString(3) + "\n\n");
+
+                infoBuffer.append("Salary: " + allDT.getString(1) + "\n");
+                infoBuffer.append("DoB: " + allDT.getString(2) + "\n");
             }
             showMessage("All Data", infoBuffer.toString());
-            all.close();
+            allEM.close();
+            allDT.close();
         } else {
             showMessage("Error", "Nothing Found");
         }
@@ -93,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
         String company = eCompany.getText().toString();
 
         ContentValues colValues = new ContentValues();
-        colValues.put(EmployeeProvider.col_1, id);
-        colValues.put(EmployeeProvider.col_2, name);
-        colValues.put(EmployeeProvider.col_3, designation);
-        colValues.put(EmployeeProvider.col_4, company);
+        colValues.put(EmployeeProvider.COL_ID, id);
+        colValues.put(EmployeeProvider.COL_NAME, name);
+        colValues.put(EmployeeProvider.COL_DESIGNATION, designation);
+        colValues.put(EmployeeProvider.COL_COMPANY, company);
 
-        int isUpdated = getContentResolver().update(EmployeeProvider.CONTENT_URL, colValues, " id=? ", new String[]{id});
+        int isUpdated = getContentResolver().update(EmployeeProvider.CONTENT_URI_EMPLOYEE, colValues, " id=? ", new String[]{id});
         if (isUpdated > 0)
             Toast.makeText(MainActivity.this, "Entry Updated", Toast.LENGTH_LONG).show();
         else
@@ -115,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         String company = eCompany.getText().toString();
 
 //        String[] projection = {"id", "name", "designation", "company"};
-        Cursor search = getContentResolver().query(EmployeeProvider.CONTENT_URL, null, "id=? OR name=? OR designation=? OR company=?", new String[]{id, name, designation, company}, null);
+        Cursor search = getContentResolver().query(EmployeeProvider.CONTENT_URI_EMPLOYEE, null, "id=? OR name=? OR designation=? OR company=?", new String[]{id, name, designation, company}, null);
 
         if (search != null && search.getCount() > 0) {
             search.moveToFirst();

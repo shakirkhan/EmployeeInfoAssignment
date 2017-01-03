@@ -22,42 +22,6 @@
         android:layout_alignParentEnd="true" />
 
 
-    <Button
-        android:text="Delete Entry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="130dp"
-        android:height="30dp"
-        android:onClick="deleteEntry"
-        android:id="@+id/button_delete"
-        android:layout_below="@+id/button_add"
-        android:layout_alignLeft="@+id/button_add"
-        android:layout_alignStart="@+id/button_add" />
-
-    <Button
-        android:text="View All"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="130dp"
-        android:height="30dp"
-        android:onClick="viewAll"
-        android:id="@+id/button_view"
-        android:layout_above="@+id/button_delete"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="UPDATE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_update"
-        android:width="130dp"
-        android:height="30dp"
-        android:onClick="update"
-        android:layout_alignBottom="@+id/button_delete"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -144,8 +108,33 @@
         android:height="30dp"
         android:onClick="search"
         android:id="@+id/button_search"
-        android:layout_below="@+id/button_delete"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4" />
+
+    <Button
+        android:text="UPDATE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_update"
+        android:width="130dp"
+        android:height="30dp"
+        android:onClick="update"
+        android:layout_above="@+id/button_search"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="View All"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="130dp"
+        android:height="30dp"
+        android:onClick="viewAll"
+        android:id="@+id/button_view"
+        android:layout_above="@+id/button_update"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:text="Add Entry"
@@ -154,12 +143,65 @@
         android:width="130dp"
         android:height="30dp"
         android:id="@+id/button_add"
-        android:layout_marginTop="27dp"
         android:onClick="addEntry"
+        android:layout_above="@+id/button_delete"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Delete Entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="130dp"
+        android:height="30dp"
+        android:onClick="deleteEntry"
+        android:id="@+id/button_delete"
+        android:layout_above="@+id/button_search"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText_dob"
+        android:layout_below="@+id/editText_salary"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Salary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="100dp"
+        android:height="30dp"
+        android:layout_marginTop="13dp"
+        android:id="@+id/textView"
         android:layout_below="@+id/textView4"
         android:layout_alignLeft="@+id/textView4"
         android:layout_alignStart="@+id/textView4" />
 
+    <TextView
+        android:text="DoB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="100dp"
+        android:height="30dp"
+        android:id="@+id/textView5"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignBottom="@+id/editText_dob" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText_salary"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>
